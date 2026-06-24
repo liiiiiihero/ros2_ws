@@ -15,7 +15,8 @@ add_executable(ros2_cpp_node src/cpp_note.cpp)
 add_executable(person_node src/person_node.cpp)
 add_executable(learn_auto src/learn_auto.cpp)
 add_executable(learn_shared_ptr src/learn_shared_ptr.cpp)
-
+add_executable(learn_lambda src/learn_lambda.cpp)
+add_executable(learn_function src/learn_function.cpp)
 
 #essage(STATUS ${rclcpp_INCLUDE_DIRS}) #Ahead files
 #essage(STATUS ${rclcpp_LIBRARIES})    #LIb   files
@@ -26,7 +27,7 @@ ament_target_dependencies(ros2_cpp_node rclcpp)
 ament_target_dependencies(person_node rclcpp)
 
 
-install(TARGETS ros2_cpp_node person_node learn_auto learn_shared_ptr
+install(TARGETS ros2_cpp_node person_node learn_auto learn_shared_ptr learn_lambda learn_function
   DESTINATION lib/${PROJECT_NAME}
 )
 if(BUILD_TESTING)
