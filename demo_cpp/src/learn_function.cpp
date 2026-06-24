@@ -48,7 +48,7 @@ int main()
     std::function<void(const std:: string&)>save2=save_with_lambda_fun;
     //成员函数放入包装器,不能直接扶植，最后为占位符，因一个成员函数故为1
     std::function<void(const std:: string&)>save3=std::bind(&File_save::save_with_member_fun,&file_save,std::placeholders::_1);
-    //包装后调用
+    //包装后统一调用
     save1("hahahah1");
     save2("hahahah2");
     save3("hahahah3");
