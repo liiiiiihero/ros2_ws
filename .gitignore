@@ -1,12 +1,6 @@
 build/
 install/
 log/
-*.log
-*.pyc
-__pycache__/
-
-# vscode
-.vscode/
-
-# 临时文件
-*.swp
+**/build/
+**/install/
+**/log/
