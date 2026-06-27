@@ -1,4 +1,6 @@
 float32 target_x
 float32 target_y
 ---
+int8 SUCCESS = 1
+int8 FAIL = 0
 int8 result  # 0=FAIL, 1=SUCCESS

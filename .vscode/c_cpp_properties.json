@@ -8,13 +8,14 @@
       "includePath": [
         "/opt/ros/humble/include/**",
         "/home/li/ros2_ws/src/demo_cpp/include/**",
-        "/usr/include/**"
+        "/usr/include/**",
+        "/home/li/ros2_ws/install/**"
       ],
       "name": "ROS",
       "intelliSenseMode": "gcc-x64",
       "compilerPath": "/usr/bin/gcc",
       "cStandard": "gnu11",
-      "cppStandard": "c++14"
+      "cppStandard": "c++17"
     }
   ],
   "version": 4
