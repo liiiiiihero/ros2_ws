@@ -19,10 +19,6 @@ private:
     double k{1.0};
     double max_speed{2.0};
 
-
-
-
-
 public:
     explicit turtle_cmd_node(const std::string &node_name):Node(node_name)
     {
@@ -37,7 +33,6 @@ public:
         //timer_ = this->create_wall_timer(1000ms,std::bind(&turtle_cmd_node::timer_callback,this));
 
     }
-
 
     void subscriber_callback(const turtlesim::msg::Pose::SharedPtr pose)//参数是收到的数据共享指针
     {
