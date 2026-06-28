@@ -2,12 +2,16 @@
 #include "geometry_msgs/msg/twist.hpp"
 #include "turtlesim/msg/pose.hpp"
 #include "chrono"
-#include <algorithm>
+#include "rcl_interfaces/msg/set_parameters_result.hpp"
 #include "srv_pkg/srv/patrol.hpp"
+#include <algorithm>
+
 
 
 using namespace std::chrono_literals;
 using Patrol =  srv_pkg::srv::Patrol;
+using SetParametersResult =  rcl_interfaces::msg::SetParametersResult;
+
 
 class turtle_cmd_node: public rclcpp::Node
 {
@@ -17,6 +21,8 @@ private:
     rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr publisher_;//发布者智能指针
     rclcpp::Subscription<turtlesim::msg::Pose>::SharedPtr subscriber_;//订阅者智能指针
     rclcpp::Service<Patrol>::SharedPtr servicer_;
+    OnSetParametersCallbackHandle::SharedPtr parameter_callback_handle_;
+
     double target_x_{1.0};
     double target_y_{1.0};
     double k{1.0};
@@ -25,6 +31,27 @@ private:
 public:
     explicit turtle_cmd_node(const std::string &node_name):Node(node_name)
     {
+        this->declare_parameter("k", 1.0);
+        this->get_parameter("k", k);
+        parameter_callback_handle_ = this->add_on_set_parameters_callback([&](const std::vector<rclcpp::Parameter> &paramters)->rcl_interfaces::msg::SetParametersResult
+            {
+                rcl_interfaces::msg::SetParametersResult result;
+                result.successful = true;
+                for(const auto & paramter :paramters)
+                {
+                    RCLCPP_INFO(this->get_logger(),"更新的参数为 %s",paramter.get_name().c_str());
+                   if(paramter.get_name ()=="k")
+                   {
+                     k = paramter.as_double();
+                   }
+                   
+                }
+
+                return result;
+            }
+        );
+        
+
         servicer_   = this->create_service<Patrol>
         ("patrol",[&](const Patrol::Request::SharedPtr request,Patrol::Response::SharedPtr response)->void
             {

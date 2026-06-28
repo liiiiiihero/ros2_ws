@@ -4,7 +4,6 @@
 #include "chrono"
 #include <algorithm>
 
-geometry_msgs::msg::Twist msg;
 using namespace std::chrono_literals;
 
 class turtle_cmd_node: public rclcpp::Node
@@ -22,6 +21,8 @@ private:
 public:
     explicit turtle_cmd_node(const std::string &node_name):Node(node_name)
     {
+        this->declare_parameter("k", 1.0);
+        this->get_parameter("k", k);
         publisher_  = this->create_publisher<geometry_msgs::msg::Twist>("/turtle1/cmd_vel",10);
         subscriber_ = this->create_subscription<turtlesim::msg::Pose>(
             "/turtle1/pose",
@@ -36,6 +37,7 @@ public:
 
     void subscriber_callback(const turtlesim::msg::Pose::SharedPtr pose)//参数是收到的数据共享指针
     {
+        geometry_msgs::msg::Twist msg;
         auto current_x = pose->x;
         auto current_y = pose->y;
         RCLCPP_INFO(get_logger(),"当前x:%f,y:%f",current_x,current_y);
