@@ -5,7 +5,7 @@
 #include <algorithm>
 #include "srv_pkg/srv/patrol.hpp"
 
-geometry_msgs::msg::Twist msg;
+
 using namespace std::chrono_literals;
 using Patrol =  srv_pkg::srv::Patrol;
 
@@ -25,18 +25,21 @@ private:
 public:
     explicit turtle_cmd_node(const std::string &node_name):Node(node_name)
     {
-        servicer_   = this->create_service<Patrol>("patrol",[&](const Patrol::Request::SharedPtr request,Patrol::Response::SharedPtr response)->void{
-            if((request->target_x>0&&request->target_x<12.0f)&&(request->target_y>0&&request->target_y<12.0f))
+        servicer_   = this->create_service<Patrol>
+        ("patrol",[&](const Patrol::Request::SharedPtr request,Patrol::Response::SharedPtr response)->void
             {
-                this->target_x_ = request->target_x;
-                this->target_y_ = request->target_y; 
-                response->result = Patrol::Response::SUCCESS;
+                if((request->target_x>0&&request->target_x<12.0f)&&(request->target_y>0&&request->target_y<12.0f))
+                {
+                    this->target_x_ = request->target_x;
+                    this->target_y_ = request->target_y; 
+                    response->result = Patrol::Response::SUCCESS;
+                }
+                else
+                {
+                    response->result = Patrol::Response::FAIL;
+                }
             }
-            else
-            {
-                response->result = Patrol::Response::FAIL;
-            }
-        });
+        );
         publisher_  = this->create_publisher<geometry_msgs::msg::Twist>("/turtle1/cmd_vel",10);
         subscriber_ = this->create_subscription<turtlesim::msg::Pose>(
             "/turtle1/pose",
@@ -51,6 +54,8 @@ public:
 
     void subscriber_callback(const turtlesim::msg::Pose::SharedPtr pose)//参数是收到的数据共享指针
     {
+        
+        geometry_msgs::msg::Twist msg;
         auto current_x = pose->x;
         auto current_y = pose->y;
         RCLCPP_INFO(get_logger(),"当前x:%f,y:%f",current_x,current_y);
